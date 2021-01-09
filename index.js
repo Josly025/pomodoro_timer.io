@@ -2,7 +2,7 @@ const timeInput = document.getElementById("time");
 const startBtn = document.getElementById("start");
 const pauseBtn = document.getElementById("pause");
 
-//one class for all events and arguments from DOM
+//** one class for all events and arguments from DOM
 class Timer {
   constructor(timeInput, startBtn, pauseBtn, callbacks) {
     this.timeInput = timeInput;

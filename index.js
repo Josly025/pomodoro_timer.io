@@ -16,6 +16,8 @@ class Timer {
 
     if (callbacks) {
       this.onStart = callbacks.onStart;
+      this.onTick = callbacks.onTick;
+      this.onComplete = callbacks.onComplete;
     }
 
     this.startBtn.addEventListener("click", this.startTimer);
@@ -24,11 +26,13 @@ class Timer {
 
   startTimer = () => {
     if (this.onStart) {
-      this.onStart();
+      this.onStart(this.timeRemaining);
     }
     this.currentTime();
 
-    this.interval = setInterval(this.currentTime, 1000);
+    ///change the timing to update more frequently - 50 milliseconds
+    //this should match line 49
+    this.interval = setInterval(this.currentTime, 50);
   };
 
   pauseTimer = () => {
@@ -43,9 +47,9 @@ class Timer {
         this.onComplete;
       }
     } else {
-      this.timeRemaining = timeRemaining - 1;
+      this.timeRemaining = timeRemaining - 0.05;
       if (this.onTick) {
-        this.onTick();
+        this.onTick(this.timeRemaining);
       }
     }
   };
@@ -56,18 +60,21 @@ class Timer {
   }
 
   set timeRemaining(time) {
-    return (this.timeInput.value = time);
+    return (this.timeInput.value = time.toFixed(2));
   }
 }
 
-let currentOffset = 0;
+let duration;
 const timer = new Timer(timeInput, startBtn, pauseBtn, {
-  onStart() {
+  onStart(totalDuration) {
+    duration = totalDuration;
     console.log("Timer started");
   },
-  onTick() {
-    circle.setAttribute("stroke-dashoffset", currentOffset);
-    currentOffset = currentOffset - 50;
+  onTick(timeRemaining) {
+    circle.setAttribute(
+      "stroke-dashoffset",
+      (perimeter * timeRemaining) / duration - perimeter
+    );
   },
   onComplete() {
     console.log("Timer is completed");

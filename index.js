@@ -1,6 +1,11 @@
 const timeInput = document.getElementById("time");
 const startBtn = document.getElementById("start");
 const pauseBtn = document.getElementById("pause");
+const circle = document.querySelector("circle");
+
+//perimeter forumla
+const perimeter = circle.getAttribute("r") * 2 * Math.PI;
+circle.setAttribute("stroke-dasharray", perimeter);
 
 //** one class for all events and arguments from DOM
 class Timer {
@@ -55,12 +60,14 @@ class Timer {
   }
 }
 
+let currentOffset = 0;
 const timer = new Timer(timeInput, startBtn, pauseBtn, {
   onStart() {
     console.log("Timer started");
   },
   onTick() {
-    console.log("Timer just ticked down");
+    circle.setAttribute("stroke-dashoffset", currentOffset);
+    currentOffset = currentOffset - 50;
   },
   onComplete() {
     console.log("Timer is completed");
